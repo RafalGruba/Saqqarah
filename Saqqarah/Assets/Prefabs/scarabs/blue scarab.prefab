@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7809656323516632097}
   m_LocalRotation: {x: 0, y: -0.70710677, z: 0.70710677, w: 0}
-  m_LocalPosition: {x: -0.479, y: -0, z: -1.103}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -110,4 +110,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scarabSpeed: 3
-  goldenScarab: {fileID: 8298048165103653615, guid: 1f547324d0e583140bf019293236e430, type: 3}
