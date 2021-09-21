@@ -109,4 +109,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc410ca898c00ec48ac492ab67f04f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scarabSpeed: 3
+  scarabSpeed: 5
