@@ -5,7 +5,7 @@ using UnityEngine;
 public class LineController : MonoBehaviour
 {
     private LineRenderer lr;
-    private Transform[] points;
+    private List<Transform> points = new List<Transform>();
 
 
     private void Awake()
@@ -13,17 +13,17 @@ public class LineController : MonoBehaviour
         lr = GetComponent<LineRenderer>();
     }
 
-    public void SetUpLine(Transform[] points)
+    public void SetUpLine(List<Transform> points)
     {
-        lr.positionCount = points.Length;
+        lr.positionCount = points.Count;
         this.points = points;
     }
 
     private void Update()
     {
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i <= points.Count - 1; i++)
         {
-            lr.SetPosition(i, points[i].position);
+            lr.SetPosition(i, new Vector3(points[i].position.x, points[i].position.y, -0.15f));
         }
     }
 

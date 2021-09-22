@@ -21,10 +21,9 @@ public class BlueScarab : MonoBehaviour
         }
     }
 
-    // this has to be fixed
-
     public bool IsBlueMoving()
     {
         return blueIsMoving;
     }
+
 }

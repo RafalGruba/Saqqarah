@@ -12,7 +12,12 @@ public class Waypoints : MonoBehaviour
     bool blueAlreadyExist;
     GameObject existingBlue;
     GameObject[] whereCanBlueGo;
+    RenderLines rl;
 
+    private void Start()
+    {
+        rl = FindObjectOfType<RenderLines>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -22,6 +27,8 @@ public class Waypoints : MonoBehaviour
             GameObject blue = Instantiate(blueScarab, transform.position, Quaternion.identity, transform) as GameObject;
             Destroy(stoneScarab);
             goldenScarab.SetActive(true);
+            rl.AddLineWaypoint(this.gameObject.transform);
+            Debug.Log(this.gameObject.transform.position);
         }
         else
         {
@@ -31,9 +38,12 @@ public class Waypoints : MonoBehaviour
                 {
                     if (this.gameObject.name == whereCanBlueGo[i].gameObject.name) // check if Waypoint that was hit is on the array of avaiable paths for Blue Scarab by comparing Waypoint names
                     {
+                        // zapis przebytych œcie¿ek pomiêdzy this.gameobject, a existingBlue.transform.parent.gameObject
                         Destroy(stoneScarab);
                         goldenScarab.SetActive(true);
                         Debug.Log("i have a match");
+                        rl.SwitchLeadingWaypoint(existingBlue.transform.parent.transform);
+                        rl.AddLineWaypoint(this.gameObject.transform);
                         existingBlue.transform.SetParent(this.gameObject.transform, true); // set new parent of Blue Scarab (this.gameObject), (Blue Scarab will move by itself to new parent using BlueScarab.cs)
                         return;
                     }
