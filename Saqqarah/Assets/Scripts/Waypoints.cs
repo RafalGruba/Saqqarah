@@ -13,36 +13,36 @@ public class Waypoints : MonoBehaviour
     GameObject existingBlue;
     GameObject[] whereCanBlueGo;
 
+
     private void OnTriggerEnter(Collider other)
     {
         FindGameObjectInChildWithTag(gameObject.transform.parent.gameObject, "Blue Scarab");
         if (!blueAlreadyExist)
         {
             GameObject blue = Instantiate(blueScarab, transform.position, Quaternion.identity, transform) as GameObject;
-            //FindObjectOfType<BlueScarab>().ReceiveNewPos(transform.position);
             Destroy(stoneScarab);
             goldenScarab.SetActive(true);
         }
         else
         {
-            for (int i = 0; i < whereCanBlueGo.Length; i++)
+            if (!existingBlue.GetComponent<BlueScarab>().IsBlueMoving()) // pass if blue isn't moving
             {
-                if (this.gameObject.name == whereCanBlueGo[i].gameObject.name) // check if Waypoint that was hit is on the array of avaiable paths for Blue Scarab by comparing Waypoint names
+                for (int i = 0; i < whereCanBlueGo.Length; i++)
                 {
-                    Destroy(stoneScarab);
-                    goldenScarab.SetActive(true);
-                    Debug.Log("i have a match");
-                    existingBlue.transform.SetParent(this.gameObject.transform, true); // set new parent of Blue Scarab (this.gameObject), (Blue Scarab will move by itself to new parent using BlueScarab.cs)
-                    return;
+                    if (this.gameObject.name == whereCanBlueGo[i].gameObject.name) // check if Waypoint that was hit is on the array of avaiable paths for Blue Scarab by comparing Waypoint names
+                    {
+                        Destroy(stoneScarab);
+                        goldenScarab.SetActive(true);
+                        Debug.Log("i have a match");
+                        existingBlue.transform.SetParent(this.gameObject.transform, true); // set new parent of Blue Scarab (this.gameObject), (Blue Scarab will move by itself to new parent using BlueScarab.cs)
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log("i dont have a match");
+                    }
                 }
-                else
-                {
-                    Debug.Log("i dont have a match");
-                }
-                
-
             }
-
         }
     }
 

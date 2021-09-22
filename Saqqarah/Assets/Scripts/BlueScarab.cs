@@ -6,25 +6,25 @@ public class BlueScarab : MonoBehaviour
 {
     [SerializeField] private float scarabSpeed = 3f;
 
-    Vector3 newPos;
-
+    private bool blueIsMoving = false;
     private void Update()
     {
         if (transform.position != transform.parent.transform.position)
         {
             float step = scarabSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, transform.parent.transform.position, step);
+            blueIsMoving = true;
+        }
+        else
+        {
+            blueIsMoving = false;
         }
     }
 
-    public void ReceiveNewPos(Vector3 newPosition)
-    {
-        newPos = newPosition;
-    }
+    // this has to be fixed
 
-    public Vector3 GiveCurrectPos()
+    public bool IsBlueMoving()
     {
-        return transform.position;
+        return blueIsMoving;
     }
-
 }
