@@ -9,6 +9,16 @@ public class BlueScarab : MonoBehaviour
     private bool blueIsMoving = false;
     private void Update()
     {
+        MoveToParent();
+    }
+
+    public bool IsBlueMoving()
+    {
+        return blueIsMoving;
+    }
+
+    private void MoveToParent()
+    {
         if (transform.position != transform.parent.transform.position)
         {
             float step = scarabSpeed * Time.deltaTime;
@@ -20,10 +30,4 @@ public class BlueScarab : MonoBehaviour
             blueIsMoving = false;
         }
     }
-
-    public bool IsBlueMoving()
-    {
-        return blueIsMoving;
-    }
-
 }

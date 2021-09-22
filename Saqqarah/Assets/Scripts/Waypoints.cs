@@ -4,63 +4,77 @@ using UnityEngine;
 
 public class Waypoints : MonoBehaviour
 {
-    public GameObject[] avaiablePaths;
+    public List<GameObject> availablePathss = new List<GameObject>();
     public GameObject blueScarab;
     public GameObject goldenScarab;
     public GameObject stoneScarab;
 
     bool blueAlreadyExist;
+    //bool didIWin = false;
     GameObject existingBlue;
-    GameObject[] whereCanBlueGo;
+    List<GameObject> whereCanBlueGo;
     RenderLines rl;
+    LineController lc;
+    Pedestal pdstl;
 
     private void Start()
     {
         rl = FindObjectOfType<RenderLines>();
+        lc = FindObjectOfType<LineController>();
+        pdstl = FindObjectOfType<Pedestal>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        FindGameObjectInChildWithTag(gameObject.transform.parent.gameObject, "Blue Scarab");
-        if (!blueAlreadyExist)
+        FindGameObjectInChildWithTag(gameObject.transform.parent.gameObject, "Blue Scarab"); // check if under specific wall Blue Scarab already exist
+        if (!blueAlreadyExist) // if blue scarab doesn't exist
         {
             GameObject blue = Instantiate(blueScarab, transform.position, Quaternion.identity, transform) as GameObject;
             Destroy(stoneScarab);
             goldenScarab.SetActive(true);
-            rl.AddLineWaypoint(this.gameObject.transform);
-            Debug.Log(this.gameObject.transform.position);
+            rl.AddLineWaypoint(this.gameObject.transform); // add new waypoint to Line Renderer
         }
-        else
+        else // if blue scarab does exist
         {
             if (!existingBlue.GetComponent<BlueScarab>().IsBlueMoving()) // pass if blue isn't moving
             {
-                for (int i = 0; i < whereCanBlueGo.Length; i++)
+                for (int i = 0; i <= whereCanBlueGo.Count - 1; i++)
                 {
                     if (this.gameObject.name == whereCanBlueGo[i].gameObject.name) // check if Waypoint that was hit is on the array of avaiable paths for Blue Scarab by comparing Waypoint names
                     {
-                        // zapis przebytych œcie¿ek pomiêdzy this.gameobject, a existingBlue.transform.parent.gameObject
-                        Destroy(stoneScarab);
+                        RemovePath(existingBlue.transform.parent.name); // remove possibility going from B to A
+                        whereCanBlueGo.Remove(whereCanBlueGo[i]); // remove possibility going from A to B
+                        Destroy(stoneScarab); 
                         goldenScarab.SetActive(true);
-                        Debug.Log("i have a match");
-                        rl.SwitchLeadingWaypoint(existingBlue.transform.parent.transform);
-                        rl.AddLineWaypoint(this.gameObject.transform);
+                        rl.AddLineWaypoint(this.gameObject.transform); // add new waypoint to Line Renderer
                         existingBlue.transform.SetParent(this.gameObject.transform, true); // set new parent of Blue Scarab (this.gameObject), (Blue Scarab will move by itself to new parent using BlueScarab.cs)
-                        return;
-                    }
-                    else
-                    {
-                        Debug.Log("i dont have a match");
+                        if (lc.DidIWin())
+                        {
+                            pdstl.IWin();
+                        } // win reward
+                        return; // no point to go further
                     }
                 }
             }
         }
     }
 
-    public GameObject[] PassAnArray()
+    private void RemovePath(string whereBlueCameFrom)
     {
-        whereCanBlueGo = avaiablePaths;
+        for (int j = 0; j <= availablePathss.Count - 1; j++) 
+        {
+            if (availablePathss[j].gameObject.name == whereBlueCameFrom)
+            {
+                availablePathss.Remove(availablePathss[j]);
+            }
+        }
+    } // remove possibility going from B to A
+
+    public List<GameObject> PassList()
+    {
+        whereCanBlueGo = availablePathss;
         return whereCanBlueGo;
-    }
+    } // passing the list
 
     public GameObject FindGameObjectInChildWithTag(GameObject parent, string tag)
     {
@@ -74,7 +88,7 @@ public class Waypoints : MonoBehaviour
                 {
                     blueAlreadyExist = true;
                     existingBlue = t.GetChild(i).GetChild(j).gameObject;
-                    whereCanBlueGo = existingBlue.transform.parent.gameObject.GetComponent<Waypoints>().PassAnArray();
+                    whereCanBlueGo = existingBlue.transform.parent.gameObject.GetComponent<Waypoints>().PassList();
                     return null;
                 }
                 else
@@ -87,6 +101,6 @@ public class Waypoints : MonoBehaviour
         }
 
         return null;
-    }
+    } // find a child of 2nd instantion under game object "Wall"
 
 }

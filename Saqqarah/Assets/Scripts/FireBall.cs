@@ -23,7 +23,7 @@ public class FireBall : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            myAnimator.SetTrigger("fire shot");
+            myAnimator.SetTrigger("fire shot"); // animation trigger
             GameObject projectile = Instantiate(fireBall, fireBallSpawner.transform.position, Quaternion.identity) as GameObject;
             Destroy(projectile, 0.5f);
         }
